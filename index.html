@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Form</title>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>NPM</td>
+            <td><input type="text" id="npm" /></td>
+        </tr>
+        <tr>
+            <td>Nama</td>
+            <td><input type="text" id="nama" /></td>
+        </tr>
+        <tr>
+            <td>Jurusan</td>
+            <td><input type="text" id="jurusan" /></td>
+        </tr>
+        <tr>
+            <td>TTL</td>
+            <td><input type="text" id="tpl" /><input type="date" id="tgl"></td>
+        </tr>
+        <tr>
+            <td>Jenis Kelamin</td>
+            <td>
+                <input type="radio" class="jekel" value="Laki-laki" />Laki-laki
+                <input type="radio" class="jekel" value="Perempuan">Perempuan
+            </td>
+        </tr>
+        <tr>
+            <td>Minat</td>
+            <td>
+                <input type="checkbox" class="check" value="PHP" />PHP
+                <input type="checkbox" class="check" value="Javascript">Javascript
+                <input type="checkbox" class="check" value="HTML">HTML
+                <input type="checkbox" class="check" value="CSS">CSS
+            </td>
+        </tr>
+    </table>
+    <button onclick="submitData()">Submit</button>
+    </p>
+    <P id="hslNpm"></P>
+    <P id="hslNama"></P>
+    <P id="hslJurusan"></P>
+    <P id="hslTtl"></P>
+    <P id="hslJekel"></P>
+    <P id="hslMinat"></P>
+    <p class="isiStorage"></p>
+
+    <script>
+        function submitData() {
+            let npm = document.getElementById('npm').value;
+
+            let nama = document.getElementById('nama').value;
+
+            let jurusan = document.getElementById('jurusan').value;
+
+            let tpl = document.getElementById('tpl').value;
+            let tgl = document.getElementById('tgl').value;
+
+            let minat = document.getElementsByClassName('check');
+            let jekel = document.getElementsByClassName('jekel');
+            if (!jekel.checked) {
+                let hslJekel = document.getElementById('hslJekel').innerHTML = `Jenis Kelamin : `;
+            }
+            let isijekel;
+            for (let index = 0; index < jekel.length; index++) {
+                if (jekel[index].checked) {
+                    let hslJekel = document.getElementById('hslJekel').innerHTML = `Jenis Kelamin : ` + jekel[index].value;
+                    isijekel = jekel[index].value;
+                }
+            }
+
+
+
+            let arrMinat = new Array();
+            if (!minat.checked) {
+                let hslMinat = document.getElementById('hslMinat').innerHTML = `Minat : `;
+            }
+            for (let index = 0; index < minat.length; index++) {
+                if (minat[index].checked) {
+
+                    arrMinat.push(minat[index].value);
+                    let hslMinat = document.getElementById('hslMinat').innerHTML = `Minat : ` + arrMinat;
+                }
+
+            }
+
+            // alert(`Nama : ${nama + `\n Jurusan : ` + jurusan}`);
+            let hslNpm = document.getElementById('hslNpm').innerHTML = `Npm : ` + npm;
+            let hslNama = document.getElementById('hslNama').innerHTML = `Nama : ` + nama;
+            let hslJurusan = document.getElementById('hslJurusan').innerHTML = `Jurusan : ` + jurusan;
+            let hslTtl = document.getElementById('hslTtl').innerHTML = `TTL : ` + tpl + ", " + tgl;
+
+            let dtMhs = {
+                npm: npm,
+                nama: nama,
+                jurusan: jurusan,
+                tpl: tpl,
+                tgl: tgl,
+                jekel: isijekel,
+                minat: arrMinat,
+            };
+
+            if (localStorage.dtMhs) {
+                let arrDtmhs = JSON.parse(localStorage.dtMhs);
+                arrDtmhs.push(dtMhs);
+                localStorage.setItem("dtMhs", JSON.stringify(arrDtmhs));
+            } else {
+                let arrDtmhs = new Array();
+                arrDtmhs.push(dtMhs);
+                localStorage.setItem("dtMhs", JSON.stringify(arrDtmhs));
+            }
+
+
+        }
+
+        let isiStorage = document.getElementsByClassName('isiStorage');
+        if (isiStorage.item(0).innerHTML == "") {
+            fIsistorage();
+        }
+
+
+        function fIsistorage() {
+            if (localStorage.dtMhs) {
+                console.log('data ada');
+            } else {
+                console.log('data tidak ada');
+                return false;
+            }
+
+            let arrStorage = new Array;
+            for (let index = 0; index < JSON.parse(localStorage.dtMhs).length; index++) {
+
+                console.log(`isi : ${(JSON.parse(localStorage.dtMhs)[index]['npm'])}, ${(JSON.parse(localStorage.dtMhs)[index]['nama'])}, ${(JSON.parse(localStorage.dtMhs)[index]['jurusan'])}, ${(JSON.parse(localStorage.dtMhs)[index]['tpl'])} ${(JSON.parse(localStorage.dtMhs)[index]['tgl'])}, ${(JSON.parse(localStorage.dtMhs)[index]['jekel'])}, ${(JSON.parse(localStorage.dtMhs)[index]['minat'])}`);
+
+                arrStorage.push([(JSON.parse(localStorage.dtMhs)[index].npm), (JSON.parse(localStorage.dtMhs)[index].nama), (JSON.parse(localStorage.dtMhs)[index].jurusan), (JSON.parse(localStorage.dtMhs)[index].tpl) + "/" + (JSON.parse(localStorage.dtMhs)[index].tgl), (JSON.parse(localStorage.dtMhs)[index].jekel), (JSON.parse(localStorage.dtMhs)[index].minat)]);
+                isiStorage.item(0).innerHTML = arrStorage;
+                // console.log(arrStorage);
+            };
+            return isiStorage;
+        }
+    </script>
+</body>
+
+</html>
